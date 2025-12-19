@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Obstacle Avoidance Robot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="dark">
+
+  <div class="grid-container">
+    
+    <header class="header">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 7l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 22V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <h1 class="brand__title">Obstacle Avoidance Robot</h1>
+          <div class="brand__subtitle">by Team ADSM</div>
+        </div>
+      </div>
+      <div class="header__actions">
+        <div class="mode-control">
+          <span class="label">Mode</span>
+          <div id="modeToggle" class="toggle" role="switch" aria-checked="false" tabindex="0" data-on="false" title="Toggle Auto/Manual">
+            <div class="toggle__knob"></div>
+          </div>
+          <span id="modeLabel" class="pill pill--mode">Manual</span>
+        </div>
+        <button id="settingsBtn" class="btn btn--icon" title="Settings">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 15.5C10.067 15.5 8.5 13.933 8.5 12S10.067 8.5 12 8.5 15.5 10.067 15.5 12 13.933 15.5 12 15.5zM19.43 12.97c.04-.32.07-.64.07-.97 0-.33-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+    
+    <section class="card controls-card">
+      <h2 class="card__title">Manual Control Console</h2>
+      <p class="card__subtitle">Use arrow keys or tap the D-pad. Controls disabled in Auto mode.</p>
+      <div class="control-pad-container">
+        <div class="control-pad">
+          <button id="btnUp" class="btn btn--primary d-pad" title="Forward (W / ↑)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 20V7.825l-5.6 5.6L4 12l8-8 8 8-1.4 1.425-5.6-5.6V20z"/></svg></button>
+          <button id="btnLeft" class="btn btn--primary d-pad" title="Left (A / ←)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 13v-2h12.175l-5.6-5.6L12 4l8 8-8 8-1.425-1.4 5.6-5.6z" transform="rotate(180 12 12)"/></svg></button>
+          <button id="btnStop" class="btn btn--danger" title="STOP (Space)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 7h10v10H7z"/></svg></button>
+          <button id="btnRight" class="btn btn--primary d-pad" title="Right (D / →)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 13v-2h12.175l-5.6-5.6L12 4l8 8-8 8-1.425-1.4 5.6-5.6z"/></svg></button>
+          <button id="btnDown" class="btn btn--primary d-pad" title="Backward (S / ↓)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 20V7.825l-5.6 5.6L4 12l8-8 8 8-1.4 1.425-5.6-5.6V20z" transform="rotate(180 12 12)"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card simulation-card">
+      <h2 class="card__title">Live Simulation</h2>
+      <p class="card__subtitle">Steering wheel responds to commands</p>
+      <div class="steering-container">
+        <div id="steeringWheel" class="steering-wheel">
+          <div class="steering-grip"></div>
+          <div class="steering-grip"></div>
+          <div class="steering-grip"></div>
+          <div class="steering-grip"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card telemetry-card">
+      <h2 class="card__title">Core Telemetry</h2>
+      <div class="telemetry-grid">
+        <div class="metric"><div class="metric__label">Ultrasonic Sensor</div><div class="metric__value distance-metric"><span id="distance">—</span> <span class="unit">cm</span></div></div>
+        <div class="metric"><div class="metric__label">Connection</div><div class="metric__value"><span id="connChip" class="chip chip--bad">Disconnected</span></div></div>
+        <div class="metric"><div class="metric__label">Last Command</div><div class="metric__value" id="lastCmd">—</div></div>
+        <div class="metric"><div class="metric__label">System Mode</div><div class="metric__value" id="modeMetric">Manual</div></div>
+        <div class="metric metric--full">
+          <div class="metric__label">Motor Speed Control</div>
+          <div class="speed-control">
+            <div class="speed-icon-container">
+              <div id="speedIcon" class="speed-icon" data-value="100"></div>
+            </div>
+            <input type="range" id="speedSlider" class="speed-slider" min="0" max="5" value="2" step="1">
+            <div class="speed-labels">
+              <span>0</span>
+              <span>180</span>
+              <span>198</span>
+              <span>217</span>
+              <span>235</span>
+              <span>255</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card logs-card">
+        <div class="logs-header">
+          <h2 class="card__title">Event Log</h2>
+          <div id="fbStatus" class="header__status">Firebase: not initialized</div>
+        </div>
+        <div id="logsContent" class="logs-content"></div>
+    </section>
+
+  </div>
+
+  <div id="themePanel" class="theme-panel">
+      <div class="theme-panel__header">
+        <h3 class="theme-panel__title">Settings</h3>
+        <button id="closeThemePanelBtn" class="btn btn--icon" title="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z"/></svg>
+        </button>
+      </div>
+      <div class="theme-panel__content">
+        <div class="setting-group">
+          <label class="setting-group__label">Theme</label>
+          <div class="theme-switcher">
+            <button class="theme-switcher__btn" data-theme-set="light">Light</button>
+            <button class="theme-switcher__btn" data-theme-set="dark">Dark</button>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label class="setting-group__label">Accent Color</label>
+          <div class="color-picker-section">
+            <!-- Preset Colors -->
+            <div class="color-presets">
+              <div id="colorSwatches" class="color-swatches">
+                <button class="color-swatch" data-color="#0ea5e9" style="--swatch-color: #0ea5e9"></button>
+                <button class="color-swatch" data-color="#4f46e5" style="--swatch-color: #4f46e5"></button>
+                <button class="color-swatch" data-color="#10b981" style="--swatch-color: #10b981"></button>
+                <button class="color-swatch" data-color="#e11d48" style="--swatch-color: #e11d48"></button>
+                <button class="color-swatch" data-color="#f59e0b" style="--swatch-color: #f59e0b"></button>
+                <button class="color-swatch" data-color="#8b5cf6" style="--swatch-color: #8b5cf6"></button>
+                <button class="color-swatch" data-color="#ec4899" style="--swatch-color: #ec4899"></button>
+              </div>
+            </div>
+
+            <!-- Recent Colors -->
+            <div class="recent-colors-section">
+              <label class="color-subsection-label">Recent Colors</label>
+              <div id="recentColors" class="recent-colors">
+                <div class="recent-colors-empty">No recent colors</div>
+              </div>
+            </div>
+
+            <!-- Custom Color Picker -->
+            <div class="custom-picker-section">
+              <label class="color-subsection-label">Custom Color</label>
+              
+              <!-- Color Spectrum Canvas -->
+              <div class="spectrum-container">
+                <canvas id="colorSpectrum" class="color-spectrum" width="360" height="160"></canvas>
+                <div id="spectrumCursor" class="spectrum-cursor"></div>
+              </div>
+
+              <!-- Brightness Slider -->
+              <div class="brightness-control">
+                <label class="brightness-label">Brightness</label>
+                <input type="range" id="brightnessSlider" class="brightness-slider" min="0" max="100" value="50">
+              </div>
+
+              <!-- RGB Input Fields -->
+              <div class="rgb-controls">
+                <div class="rgb-input-group">
+                  <label class="rgb-label">R</label>
+                  <input type="number" id="rgbR" class="rgb-input" min="0" max="255" value="14">
+                </div>
+                <div class="rgb-input-group">
+                  <label class="rgb-label">G</label>
+                  <input type="number" id="rgbG" class="rgb-input" min="0" max="255" value="165">
+                </div>
+                <div class="rgb-input-group">
+                  <label class="rgb-label">B</label>
+                  <input type="number" id="rgbB" class="rgb-input" min="0" max="255" value="233">
+                </div>
+                <div class="rgb-hex-display">
+                  <span id="hexValue">#0ea5e9</span>
+                </div>
+              </div>
+
+              <!-- Color Preview & Apply Buttons -->
+              <div class="color-preview-box" id="colorPreview">
+                <div class="color-preview-label">Preview</div>
+                <div class="color-preview-swatch" id="previewSwatch"></div>
+              </div>
+              <button id="applyCustomColor" class="btn-apply-color">Apply Custom Color</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div id="themePanelOverlay" class="theme-panel-overlay"></div>
+
+  <script type="module" src="app.js"></script>
+  <script type="module" src="simulation.js"></script>
+</body>
+</html>
